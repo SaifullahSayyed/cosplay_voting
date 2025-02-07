@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosplay Event Voting</title>
+    <style>
+        body {
+            background-image: url('https://drive.google.com/file/d/1noM6NBbe1tlXCnZT35uiFL2w_ifSCM3X/view?usp=drive_link'); /* Updated direct link */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;  
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+            margin-top: 50px;
+        }
+        input[type="radio"] {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #voteCount {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Vote for Your Favorite Cosplay</h2>
+        <form id="votingForm">
+            <input type="radio" name="vote" value="Participant 1"> Participant 1<br>
+            <input type="radio" name="vote" value="Participant 2"> Participant 2<br>
+            <input type="radio" name="vote" value="Participant 3"> Participant 3<br>
+            <br>
+            <button type="button" onclick="submitVote()">Submit Vote</button>
+        </form>
+        <div id="result"></div>
+        <div id="voteCount"></div>
+    </div>
+
+    <script>
+        let voteCounts = {
+            "Participant 1": 0,
+            "Participant 2": 0,
+            "Participant 3": 0
+        };
+
+        function submitVote() {
+            const form = document.getElementById('votingForm');
+            const selectedOption = form.vote.value;
+            if (selectedOption) {
+                voteCounts[selectedOption]++;
+                document.getElementById('result').innerText = 'Thank you for voting for ' + selectedOption + '!';
+                updateVoteCount();
+            } else {
+                document.getElementById('result').innerText = 'Please select an option before voting.';
+            }
+        }
+
+        function updateVoteCount() {
+            let voteCountText = 'Current Voting Results:<br>';
+            for (let participant in voteCounts) {
+                voteCountText += `${participant}: ${voteCounts[participant]} votes<br>`;
+            }
+            document.getElementById('voteCount').innerHTML = voteCountText;
+        }
+    </script>
+</body>
+</html>
