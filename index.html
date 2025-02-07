@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosplay Event Voting</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <style>
         body {
-            background-image: url('https://drive.google.com/file/d/1noM6NBbe1tlXCnZT35uiFL2w_ifSCM3X/view?usp=drive_link'); /* Updated direct link */
+            background-image: url('https://drive.google.com/uc?id=1noM6NBbe1tlXCnZT35uiFL2w_ifSCM3X'); /* Updated direct link */
             background-size: cover;
             background-repeat: no-repeat;
-            background-attachment: fixed;  
+            background-attachment: fixed;
             color: white;
             font-family: Arial, sans-serif;
         }
@@ -56,6 +57,10 @@
     </div>
 
     <script>
+        (function(){
+            emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS user ID
+        })();
+
         let voteCounts = {
             "Participant 1": 0,
             "Participant 2": 0,
@@ -63,12 +68,19 @@
         };
 
         function submitVote() {
+            if (localStorage.getItem('hasVoted')) {
+                document.getElementById('result').innerText = 'You have already voted. Thank you!';
+                return;
+            }
+
             const form = document.getElementById('votingForm');
             const selectedOption = form.vote.value;
             if (selectedOption) {
                 voteCounts[selectedOption]++;
                 document.getElementById('result').innerText = 'Thank you for voting for ' + selectedOption + '!';
+                localStorage.setItem('hasVoted', 'true');
                 updateVoteCount();
+                sendEmail(selectedOption);
             } else {
                 document.getElementById('result').innerText = 'Please select an option before voting.';
             }
@@ -80,6 +92,21 @@
                 voteCountText += `${participant}: ${voteCounts[participant]} votes<br>`;
             }
             document.getElementById('voteCount').innerHTML = voteCountText;
+        }
+
+        function sendEmail(selectedOption) {
+            const templateParams = {
+                email_id: 'saif25.sayyed@gmail.com',
+                participant: selectedOption,
+                votes: voteCounts[selectedOption]
+            };
+
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                }, function(error) {
+                    console.log('FAILED...', error);
+                });
         }
     </script>
 </body>
